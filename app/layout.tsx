@@ -1,3 +1,4 @@
+import { GameProvider } from '@/lib/useGameContext'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -16,7 +17,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <GameProvider>
       <body className={inter.className}>{children}</body>
+      </GameProvider>
     </html>
   )
 }
