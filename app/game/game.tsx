@@ -15,7 +15,6 @@ export default function GameRound() {
 
   console.log(game, "game");
 
-
   return (
     <>
       {guessingPlayer !== null && game.players[guessingPlayer]?.word === "" ? (
@@ -40,6 +39,7 @@ const ShowWord = ({ word }: { word: string }) => {
 
   return (
     <Button
+      variant="secondary"
       onClick={() => {
         setShowWord(!showWord);
       }}
@@ -90,8 +90,6 @@ const MisterWhiteGuess = ({
     }
   };
 
-
-
   return (
     <div className="flex w-full flex-col gap-4 px-4">
       <h1 className="mx-auto  p-2 rounded-md text-center text-2xl">
@@ -106,7 +104,11 @@ const MisterWhiteGuess = ({
       <DialogGeneric
         title="Your Guess"
         subtitle="Enter the word you think it is"
-        trigger={<Button>Guess</Button>}
+        trigger={
+          <Button size="lg" className="mx-auto">
+            Guess
+          </Button>
+        }
       >
         {message ? (
           <p className="text-red-500 text-center text-4xl">{message}</p>
@@ -135,14 +137,13 @@ const GameBoard = ({
   const { game, setGame } = useContext(GameContext);
 
   useEffect(() => {
-      if (areAllintrudersDead(game) || areAllCrewmatesDead(game)) {
-        setGame({
-          ...game,
-          state: "end",
-        });
-      }
-}, [game.players, setGame]);
-
+    if (areAllintrudersDead(game) || areAllCrewmatesDead(game)) {
+      setGame({
+        ...game,
+        state: "end",
+      });
+    }
+  }, [game.players, setGame]);
 
   return (
     <div className="flex flex-wrap gap-4 lg:gap-10 items-center justify-center h-full">
@@ -171,6 +172,7 @@ const GameBoard = ({
           key={index}
         >
           <div className="flex flex-col px-4 gap-4">
+            <ShowWord word={player.word} />
             <Button
               onClick={() => {
                 const newPlayers = [...game.players];
@@ -189,11 +191,9 @@ const GameBoard = ({
             >
               Kill
             </Button>
-            <ShowWord word={player.word} />
           </div>
         </DialogGeneric>
       ))}
-    
     </div>
   );
 };
