@@ -41,8 +41,8 @@ export default function GameIntro() {
             subtitle="Enter your name to start the game"
             trigger={
               <Card
-                variant={player.name.includes("Player") ? reject ? "destructive" : "default" : "valid"}
-                className="rounded-full w-[20vw] cursor-pointer lg:w-[15vw] @container flex items-center justify-center p-4 aspect-square"
+                variant={player.name.includes("Player") ? reject ? "destructive" : "outline" : "valid"}
+                className="rounded-full  w-[20vw] cursor-pointer lg:w-[15vw] @container flex items-center justify-center p-4 aspect-square"
                 key={index}
               >
                 <CardTitle className="opacity-60 whitespace-nowrap tracking-tight text-sm @[100px]:text-lg @[150px]:text-xl">
@@ -52,7 +52,7 @@ export default function GameIntro() {
             }
             key={index}
           >
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col px-4 gap-4">
               <h1 className="text-2xl mx-auto border bg-primary/20 p-2 rounded-md">
               {player.word.length > 0  ? `Your word: ${player.word}` : "Mister White"}
               </h1>
@@ -69,6 +69,7 @@ export default function GameIntro() {
           </DialogGeneric>
         ))}
         <Card
+        variant='outline'
           onClick={() => {
             setGame({
               ...game,
@@ -81,7 +82,7 @@ export default function GameIntro() {
           }}
           className="rounded-full w-[20vw] cursor-pointer lg:w-[15vw] @container flex items-center justify-center p-4 aspect-square"
         >
-          <CardTitle className="text-4xl">+</CardTitle>
+          <CardTitle className="text-xl lg:text-4xl">+</CardTitle>
         </Card>
       </div>
     </>

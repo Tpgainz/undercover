@@ -153,7 +153,7 @@ const GameBoard = ({
           subtitle="In this menu you can kill a player or remind yourself of your word"
           trigger={
             <Card
-              variant={player.isAlive ? "default" : "destructive"}
+              variant={player.isAlive ? "valid" : "destructive"}
               className="rounded-full w-[20vw] cursor-pointer lg:w-[15vw] @container flex items-center justify-center p-4 aspect-square"
               key={index}
             >
