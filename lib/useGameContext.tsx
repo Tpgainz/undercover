@@ -1,5 +1,5 @@
 "use client";
-import { TGame, TGameContext } from "@/app/types/global";
+import { TGame, TGameContext } from "@/app/types/types";
 import { createContext, useEffect, useState } from "react";
 
 const wordsList = [

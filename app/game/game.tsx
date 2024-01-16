@@ -3,8 +3,8 @@ import { DialogGeneric } from "@/components/dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
 import { GameContext } from "@/lib/useGameContext";
-import { use, useContext, useEffect, useState } from "react";
-import { TGame } from "../types/global";
+import { useContext, useEffect, useState } from "react";
+import { TGame } from "../types/types";
 import { Input } from "@/components/ui/input";
 import { areAllCrewmatesDead, areAllintrudersDead } from "@/lib/allDead";
 
@@ -182,7 +182,6 @@ const GameBoard = ({
                 ) {
                   setGuessingPlayer(index);
                 }
-
                 setGame({
                   ...game,
                   players: newPlayers,

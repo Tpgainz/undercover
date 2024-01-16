@@ -1,5 +1,21 @@
 {
-  "name": "mygamelol",
+  "name": "misterwhite",
+  "author": {
+    "name": "Tpgainz",
+    "email": "tpain45200@gmail.com"
+  },
+  "license": "MIT",
+  "description": "Mister white game made with react",
+  "keywords": [
+    "react",
+    "next",
+    "tailwind",
+    "typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tpgainz/misterwhite"
+  },
   "version": "0.1.0",
   "private": true,
   "scripts": {
