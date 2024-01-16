@@ -1,4 +1,4 @@
-import { TGame } from "@/app/types/global";
+import { TGame } from "@/app/types/types";
 
 const areAllintrudersDead = (
     game: TGame
