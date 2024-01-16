@@ -4,8 +4,10 @@ import { useMediaQuery } from "@/lib/useMediaQuery";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -37,6 +39,16 @@ export function DialogGeneric({
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
+  React.useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        setOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={enabled ? setOpen : open ? setOpen : undefined}>
@@ -47,7 +59,13 @@ export function DialogGeneric({
             <DialogDescription>{subtitle}</DialogDescription>
           </DialogHeader>
           {children}
+        <DialogFooter className="pt-2">
+        <DialogClose asChild>
+          <Button variant="outline">Close</Button>
+        </DialogClose>
+        </DialogFooter>
         </DialogContent>
+
       </Dialog>
     );
   }
@@ -63,7 +81,7 @@ export function DialogGeneric({
         {children}
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline">Close</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

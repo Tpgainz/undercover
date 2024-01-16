@@ -13,9 +13,9 @@ export default function GameConfig() {
 
 
   return (
-    <TabsContent value="config">
+    <TabsContent className='flex items-center justify-center' value="config">
       <Card
-        className=" mx-auto max-w-lg 
+        className=" mx-4 max-w-lg w-full
       "
       >
         <CardHeader>
