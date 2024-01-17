@@ -13,7 +13,7 @@ export default function GameConfig() {
 
 
   return (
-    <TabsContent className='flex items-center justify-center' value="config">
+    <TabsContent className='flex items-center h-full justify-center' value="config">
       <Card
         className=" mx-4 max-w-lg w-full
       "
@@ -28,11 +28,13 @@ export default function GameConfig() {
               const optionKey = key as keyof typeof options;
               return (
                 <div key={key} className="flex flex-col gap-2">
-                  <Label htmlFor={key}>{key}</Label>
+
+                  <Label htmlFor={key}>{key.replace(/([A-Z])/g, " $1").trim()
+                    .toUpperCase()}</Label>
                   <Input
                     defaultValue={options[optionKey]}
                     id={key}
-                   
+
                     onChange={(e) =>
                       setGame({
                         ...game,

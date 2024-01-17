@@ -121,7 +121,7 @@ export function newPlayersRoles(game: TGame) {
   const maxSpecialRoles =
     Number(game.options.misterWhite) + Number(game.options.intrus);
 
-  if (totalPlayers < maxSpecialRoles) {
+  if ((totalPlayers - 1) < maxSpecialRoles) {
     console.error(
       "Le nombre total de joueurs est inférieur à la somme de misterWhite et intrus."
     );
@@ -151,6 +151,5 @@ export function newPlayersRoles(game: TGame) {
     game.players[i].word = roles[i];
     game.players[i].isAlive = true;
   }
-
   return game.players;
 }
