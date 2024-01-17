@@ -49,6 +49,5 @@ const GameFlow = {
 
 function Game() {
   const { state } = useContext(GameContext).game;
-  console.log(state, "state");
   return <TabsContent value="game">{GameFlow[state]()}</TabsContent>;
 }
