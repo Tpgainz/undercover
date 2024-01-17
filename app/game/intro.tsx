@@ -95,17 +95,13 @@ export default function GameIntro() {
 
 const MissConfig = () => {
   return (
-      <Card
-      variant='destructive'>
-
-<CardHeader>
-       Merci de revoir les paramètres de la partie
-</CardHeader>
-<CardContent>
-  Essayer de rajouter des joueurs ou de revoir le nombre de Mister White et d'intrus
+<Card variant='destructive'>
+    <CardHeader>
+       Merci de revoir les parametres de la partie
+    </CardHeader>
+    <CardContent>
+       Essayer de rajouter des joueurs ou de revoir le nombre de Mister White et d&apos;intrus
     </CardContent>
-
-
-      </Card>
+ </Card>
   )
 }
