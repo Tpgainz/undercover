@@ -1,11 +1,11 @@
 {
-  "name": "misterwhite",
+  "name": "undercover",
   "author": {
     "name": "Tpgainz",
     "email": "tpain45200@gmail.com"
   },
   "license": "MIT",
-  "description": "Mister white game made with react",
+  "description": "undercover peer game made with react",
   "keywords": [
     "react",
     "next",
@@ -14,7 +14,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/tpgainz/misterwhite"
+    "url": "https://github.com/tpgainz/undercover"
   },
   "version": "0.1.0",
   "private": true,

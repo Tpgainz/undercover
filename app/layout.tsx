@@ -8,9 +8,9 @@ import { ModeToggle } from "@/components/toggle-darkmode";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Mister White - The Game",
+  title: "Undercover - The Game",
   description:
-    "Partagez des moments de convivialité avec vos amis autour d'un jeu de société en ligne, Mister White. Un seul téléphone suffit pour jouer une partie jusqu'à 10 joueurs.",
+    "Share a link with your friends and play a game of Undercover together. Find the intruders and be the best player!",
   authors: [{ name: "Thomas Arpin", url: "https://github/tpgainz" }],
 };
 

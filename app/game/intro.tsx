@@ -1,6 +1,6 @@
 import { DialogGeneric } from "@/components/dialog";
 import { Button } from "@/components/ui/button";
-import { Card, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { GameContext } from "@/lib/useGameContext";
 import { useContext, useState } from "react";
@@ -24,17 +24,23 @@ export default function GameIntro() {
     }
   };
 
+  console.log(game, "game");
+
   return (
     <>
       <div className="flex w-full items-center container mx-auto justify-center gap-4 pb-4">
         <Button
-          variant="outline"
+        size="lg"
+        className="mx-auto"
           onClick={checkAllNamed}
         >
           Start Game
         </Button>
       </div>
       <div className="flex flex-wrap gap-4 lg:gap-10 items-center justify-center h-full">
+      {game.players?.length === 0 && (
+        <MissConfig />
+         )}
         {game.players?.map((player, index) => (
           <DialogGeneric
             title={player.name}
@@ -42,7 +48,7 @@ export default function GameIntro() {
             trigger={
               <Card
                 variant={player.name.includes("Player") ? reject ? "destructive" : "outline" : "valid"}
-                className="rounded-full  w-[20vw] cursor-pointer lg:w-[15vw] @container flex items-center justify-center p-4 aspect-square"
+                className="rounded-full  w-[25vw] cursor-pointer lg:w-[15vw] @container flex items-center justify-center p-4 aspect-square"
                 key={index}
               >
                 <CardTitle className="opacity-60 whitespace-nowrap tracking-tight text-sm @[100px]:text-lg @[150px]:text-xl">
@@ -57,7 +63,7 @@ export default function GameIntro() {
               {player.word.length > 0  ? `Your word: ${player.word}` : "Mister White"}
               </h1>
               <Input
-                defaultValue={player.name}
+                placeholder={player.name}
                 onChange={(e) => {
                   const newPlayers = [...game.players];
                   console.log(newPlayers, "newPlayers");
@@ -80,11 +86,29 @@ export default function GameIntro() {
               
             });
           }}
-          className="rounded-full w-[20vw] cursor-pointer lg:w-[15vw] @container flex items-center justify-center p-4 aspect-square"
+          className="rounded-full w-[25vw] cursor-pointer lg:w-[15vw] @container flex items-center justify-center p-4 aspect-square"
         >
           <CardTitle className="text-xl lg:text-4xl">+</CardTitle>
         </Card>
       </div>
     </>
   );
+}
+
+
+const MissConfig = () => {
+  return (
+      <Card
+      variant='destructive'>
+
+<CardHeader>
+       Merci de revoir les paramètres de la partie
+</CardHeader>
+<CardContent>
+  Essayer de rajouter des joueurs ou de revoir le nombre de Mister White et d'intrus
+    </CardContent>
+
+
+      </Card>
+  )
 }

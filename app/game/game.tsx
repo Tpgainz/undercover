@@ -105,7 +105,7 @@ const MisterWhiteGuess = ({
         title="Your Guess"
         subtitle="Enter the word you think it is"
         trigger={
-          <Button size="lg" className="mx-auto">
+          <Button size="lg" className="md:mx-auto">
             Guess
           </Button>
         }
@@ -147,6 +147,7 @@ const GameBoard = ({
 
   return (
     <div className="flex flex-wrap gap-4 lg:gap-10 items-center justify-center h-full">
+
       {game.players?.map((player, index) => (
         <DialogGeneric
           enabled={player.isAlive}
@@ -155,7 +156,7 @@ const GameBoard = ({
           trigger={
             <Card
               variant={player.isAlive ? "valid" : "destructive"}
-              className="rounded-full w-[20vw] cursor-pointer lg:w-[15vw] @container flex items-center justify-center p-4 aspect-square"
+              className="rounded-full w-[25vw] cursor-pointer lg:w-[15vw] @container flex items-center justify-center p-4 aspect-square"
               key={index}
             >
               <CardTitle className="opacity-60 whitespace-nowrap flex flex-col items-center justify-center tracking-tight text-sm @[100px]:text-lg @[150px]:text-xl">
