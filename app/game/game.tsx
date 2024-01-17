@@ -5,8 +5,8 @@ import { Card, CardTitle } from "@/components/ui/card";
 import { GameContext } from "@/lib/useGameContext";
 import { useContext, useEffect, useState } from "react";
 import { TGame } from "../types/types";
-import { Input } from "@/components/ui/input";
 import { areAllCrewmatesDead, areAllintrudersDead } from "@/lib/allDead";
+import { MisterWhiteGuess } from "@/components/mister-white-guess";
 
 export default function GameRound() {
   const { game } = useContext(GameContext);
@@ -57,76 +57,6 @@ const determineRole = (word: string, gameWords: TGame["options"]["words"]) => {
   }
 };
 
-const MisterWhiteGuess = ({
-  correctWord,
-  onClose,
-  setGuessingPlayer,
-}: {
-  onClose: () => void;
-  correctWord: string;
-  setGuessingPlayer: (index: number | null) => void;
-}) => {
-  const [guess, setGuess] = useState("");
-  const [message, setMessage] = useState("");
-
-  const { game, setGame } = useContext(GameContext);
-
-  const handleGuessSubmit = (guess: string) => {
-    // Vérifier si la devinette est correcte
-    if (guess.toLowerCase() === correctWord.toLowerCase()) {
-      setGame({
-        ...game,
-        state: "end",
-      });
-    } else {
-      setMessage("Loupé");
-      setTimeout(() => {
-        setMessage("");
-        setGuessingPlayer(null);
-        onClose();
-      }, 2000);
-    }
-  };
-
-  return (
-    <div className="flex w-full flex-col gap-4 px-4">
-      <h1 className="mx-auto  p-2 rounded-md text-center text-2xl">
-        Vous avez trouvé un Mister White
-      </h1>
-
-      <p className="text-center text-lg">
-        Il a maintenant une chance de se rattraper en devinant le mot et
-        décrocher la victoire
-      </p>
-
-      <DialogGeneric
-        title="Your Guess"
-        subtitle="Enter the word you think it is"
-        trigger={
-          <Button size="lg" className="md:mx-auto">
-            Guess
-          </Button>
-        }
-      >
-        {message ? (
-          <p className="text-red-500 text-center text-4xl">{message}</p>
-        ) : (
-          <div className="flex flex-col gap-4 px-4">
-            <Input value={guess} onChange={(e) => setGuess(e.target.value)} />
-            <Button
-              onClick={() => {
-                handleGuessSubmit(guess), onClose;
-              }}
-            >
-              Submit
-            </Button>
-          </div>
-        )}
-      </DialogGeneric>
-    </div>
-  );
-};
-
 const GameBoard = ({
   setGuessingPlayer,
 }: {
@@ -143,9 +73,16 @@ const GameBoard = ({
     }
   }, [game.players, setGame]);
 
-  return (
-    <div className="flex flex-wrap gap-4 lg:gap-10 items-center justify-center h-full">
+  //Pick a random crewmate (alive) to start the game
+  const startingPlayer = game.players.findIndex((player) => player.isAlive && determineRole(player.word, game.options.words) === "citizen")
 
+  return (
+    <>
+      <h1 className="text-2xl lg:text-4xl text-center mb-4 lg:mb-16">
+        {game.players[startingPlayer]?.name} starts the game
+      </h1>
+        
+    <div className="flex flex-wrap gap-4 lg:gap-10 items-center justify-center h-full">
       {game.players?.map((player, index) => (
         <DialogGeneric
           enabled={player.isAlive}
@@ -193,5 +130,6 @@ const GameBoard = ({
         </DialogGeneric>
       ))}
     </div>
+    </>
   );
 };
