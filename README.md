@@ -1,7 +1,7 @@
 
-# Mister White 🎮
+# Undercover 🎮
 
-"Mister White" is a **fun** and **engaging** game designed to be played with friends or family in real life. It's a guessing game that involves identifying intruders among the players, with a twist of having a mysterious character known as "Mister White."
+"Undercover" is a **fun** and **engaging** game designed to be played with friends or family in real life. It's a guessing game that involves identifying intruders among the players, with a twist of having a mysterious character known as "Mister White."
 
 ## 🌟 Version
 
@@ -28,8 +28,8 @@
 To get started with "Mister White", clone the repository and install the dependencies:
 
 ```bash
-git clone https://github.com/tpgainz/misterwhite/
-cd misterwhite
+git clone https://github.com/tpgainz/undercover/
+cd undercover
 npm install
 ```
 
@@ -83,7 +83,7 @@ Open http://localhost:3000 with your browser to see the result.
 
 ## 🤝 Contributing
 
-Contributions to "Mister White" are welcome! Please read our contributing guidelines to get started.
+Contributions to "Undercover" are welcome! Just submit a PR
 
 ## 📄 License
 
