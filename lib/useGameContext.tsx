@@ -42,9 +42,9 @@ export const cachedGame = () => {
   if (typeof window === "undefined") {
     return;
   }
-  console.log(window.localStorage.getItem("game"), "cachedGame");
-  return (window.localStorage.getItem("game") &&
-    JSON.parse(localStorage.getItem("game")!)) as TGame;
+  console.log(window.sessionStorage.getItem("game"), "cachedGame");
+  return (window.sessionStorage.getItem("game") &&
+    JSON.parse(sessionStorage.getItem("game")!)) as TGame;
 };
 
 const defaultGame = cachedGame() ?? {
@@ -102,7 +102,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   ]); // Les propriétés spécifiques des options de jeu
 
   useEffect(() => {
-    localStorage.setItem("game", JSON.stringify(game));
+    sessionStorage.setItem("game", JSON.stringify(game));
   }, [game]);
 
   return (
