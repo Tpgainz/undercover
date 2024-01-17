@@ -42,7 +42,7 @@ export const cachedGame = () => {
   if (typeof window === "undefined") {
     return;
   }
-  console.log(window.sessionStorage.getItem("game"), "cachedGame");
+ 
   return (window.sessionStorage.getItem("game") &&
     JSON.parse(sessionStorage.getItem("game")!)) as TGame;
 };

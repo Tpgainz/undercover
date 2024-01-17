@@ -14,7 +14,6 @@ export default function GameIntro() {
 
   const checkAllNamed = () => {
     const allNamed = game.players.every((player) => !player.name.includes("Player"));
-    console.log(allNamed, "allNamed");
     if (!allNamed) {
       setReject(true);
     } else {
@@ -24,7 +23,6 @@ export default function GameIntro() {
     }
   };
 
-  console.log(game, "game");
 
   return (
     <>
@@ -66,7 +64,6 @@ export default function GameIntro() {
                 placeholder={player.name}
                 onChange={(e) => {
                   const newPlayers = [...game.players];
-                  console.log(newPlayers, "newPlayers");
                   newPlayers[index].name = e.target.value;
                   setGame({ ...game, players: newPlayers });
                 }}

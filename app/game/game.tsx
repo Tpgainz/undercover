@@ -13,8 +13,6 @@ export default function GameRound() {
 
   const [guessingPlayer, setGuessingPlayer] = useState<number | null>(null);
 
-  console.log(game, "game");
-
   return (
     <>
       {guessingPlayer !== null && game.players[guessingPlayer]?.word === "" ? (
