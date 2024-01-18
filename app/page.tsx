@@ -24,8 +24,11 @@ import { GameEnd } from "./game/end";
 
 export default function Home() {
   return (
-    <Tabs defaultValue="rules" className="w-full flex  flex-col bganimate h-[100dvh] bg-gradient-to-r from-primary/70 to-primary/80
-    ">
+    <Tabs
+      defaultValue="rules"
+      className="w-full flex  flex-col bganimate h-[100dvh] bg-gradient-to-r from-primary/70 to-primary/80
+    "
+    >
       <TabsList className="w-full flex bg-transparent justify-around">
         <TabsTrigger value="rules">Rules</TabsTrigger>
         <TabsTrigger value="config">Config</TabsTrigger>

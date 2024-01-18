@@ -6,6 +6,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "@/components/toggle-darkmode";
 import Image from "next/image";
 import Link from "next/link";
+import { ClerkProvider } from "@clerk/nextjs";
+import { ConnectionState } from "@/components/isConnected";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,29 +25,32 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <GameProvider>
-        <body className={inter.className}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-            <Link
-              href="
+      <ClerkProvider>
+        <GameProvider>
+          <body className={inter.className}>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+              <Link
+                href="
               https://github.com/tpgainz/undercover"
-              prefetch={false}
-              className="fixed bottom-0 left-0 z-50 p-4">
-              <Image src="/github.svg" width={30} height={30} alt="github"
-              />
-            </Link>
-            <div className="fixed bottom-0 right-0 z-50 p-4">
-              <ModeToggle />
-            </div>
-          </ThemeProvider>
-        </body>
-      </GameProvider>
+                prefetch={false}
+                className="fixed bottom-0 left-0 z-50 p-4"
+              >
+                <Image src="/github.svg" width={30} height={30} alt="github" />
+              </Link>
+              <div className="fixed bottom-0 right-0 z-50 p-4">
+                <ModeToggle />
+              </div>
+              <ConnectionState />
+            </ThemeProvider>
+          </body>
+        </GameProvider>
+      </ClerkProvider>
     </html>
   );
 }
