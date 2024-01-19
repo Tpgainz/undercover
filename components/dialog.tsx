@@ -29,12 +29,14 @@ export function DialogGeneric({
   subtitle,
   trigger,
   enabled = true,
+  additionalAction,
 }: {
   children: React.ReactNode;
   title: string;
   subtitle: string;
   trigger: React.ReactNode;
   enabled?: boolean;
+  additionalAction?: React.ReactNode;
 }) {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -51,7 +53,10 @@ export function DialogGeneric({
 
   if (isDesktop) {
     return (
-      <Dialog open={open} onOpenChange={enabled ? setOpen : open ? setOpen : undefined}>
+      <Dialog
+        open={open}
+        onOpenChange={enabled ? setOpen : open ? setOpen : undefined}
+      >
         <DialogTrigger asChild>{trigger}</DialogTrigger>
         <DialogContent className="sm:max-w-[425px] ">
           <DialogHeader>
@@ -59,13 +64,13 @@ export function DialogGeneric({
             <DialogDescription>{subtitle}</DialogDescription>
           </DialogHeader>
           {children}
-        <DialogFooter className="pt-2">
-        <DialogClose asChild>
-          <Button variant="outline">Close</Button>
-        </DialogClose>
-        </DialogFooter>
+          <DialogFooter className="pt-2">
+            <DialogClose asChild>
+              <Button variant="redOutline">Close</Button>
+            </DialogClose>
+            {additionalAction}
+          </DialogFooter>
         </DialogContent>
-
       </Dialog>
     );
   }
@@ -83,6 +88,7 @@ export function DialogGeneric({
           <DrawerClose asChild>
             <Button variant="outline">Close</Button>
           </DrawerClose>
+          {additionalAction}
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
