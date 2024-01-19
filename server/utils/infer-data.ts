@@ -1,9 +1,10 @@
 import { schemas } from "../shared/schema";
 import { z } from "zod";
+import { ActionDataTypes, SchemaKeys } from "../types";
 
-export const inferData = <T extends keyof typeof schemas>(
+export const inferData = <T extends SchemaKeys>(
   action: T,
-  data: unknown
+  data: ActionDataTypes<T>
 ): z.infer<typeof schemas[T]> => {
   const schema = schemas[action];
   const validationResult = schema.safeParse(data);

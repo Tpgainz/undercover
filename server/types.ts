@@ -1,6 +1,6 @@
 import { Socket } from "socket.io";
 import { schemas } from "@/server/shared/schema";
-import unsafeActions from "./shared/emits";
+import Actions from "./shared/emits";
 
 export type ExtractDataTypes<T> = {
   [K in keyof T]: T[K] extends (socket: Socket, data: infer D) => any
@@ -8,16 +8,26 @@ export type ExtractDataTypes<T> = {
     : never;
 };
 
-type TUnsafeActions = typeof unsafeActions;
+type TActions = typeof Actions;
 
-export type UnsafeKey = keyof TUnsafeActions;
+export type ActionKey = keyof TActions;
 
-export type ActionDataTypes<T extends UnsafeKey> = ExtractDataTypes<
-  Pick<TUnsafeActions, T>
+export type ActionDataTypes<T extends ActionKey> = ExtractDataTypes<
+  Pick<TActions, T>
 >[T];
 
 //From the schema to avoid circular dependency
 
-export type InferedDataTypes<T extends keyof typeof schemas> = ReturnType<
+export type SchemaKeys = keyof typeof schemas;
+
+export type InferedDataTypes<T extends SchemaKeys> = ReturnType<
   typeof schemas[T]["parse"]
 >;
+
+// Type qui génère une erreur si les deux ensembles de clés ne sont pas identiques
+type ValidateKeysAreIdentical = [SchemaKeys, ActionKey] extends [
+  ActionKey,
+  SchemaKeys
+]
+  ? true
+  : never;

@@ -1,13 +1,13 @@
 import { Socket } from "socket.io";
-import { ActionDataTypes, UnsafeKey } from "../types";
-import unsafeActions from "../shared/emits";
+import { ActionDataTypes, ActionKey } from "../types";
+import Actions from "../shared/emits";
 
 export const socketHandler = (socket: Socket) => {
   console.log("A user connected");
 
-  Object.keys(unsafeActions).forEach((action) => {
+  Object.keys(Actions).forEach((action) => {
     socket.on(action, (data) =>
-      delegateAction(socket, action as keyof ActionDataTypes<UnsafeKey>, data)
+      delegateAction(socket, action as keyof ActionDataTypes<ActionKey>, data)
     );
   });
 
@@ -16,8 +16,8 @@ export const socketHandler = (socket: Socket) => {
   });
 };
 
-const delegateAction = (socket: Socket, actionType: UnsafeKey, data: any) => {
-  const action = unsafeActions[actionType];
+const delegateAction = (socket: Socket, actionType: ActionKey, data: any) => {
+  const action = Actions[actionType];
   if (action) {
     ensureData(socket, () => action(socket, data));
   } else {
