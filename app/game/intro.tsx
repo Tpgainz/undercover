@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { GameContext } from "@/lib/useGameContext";
+import { useSearchParams } from "next/navigation";
 import { useContext, useState } from "react";
 
 export default function GameIntro() {
@@ -10,42 +11,43 @@ export default function GameIntro() {
 
   const [reject, setReject] = useState(false);
 
-
-
   const checkAllNamed = () => {
-    const allNamed = game.players.every((player) => !player.name.includes("Player"));
+    const allNamed = game.players.every(
+      (player) => !player.name.includes("Player")
+    );
     if (!allNamed) {
       setReject(true);
     } else {
-      setGame({ ...game,
-        
-         state: "playing" });
+      setGame({
+        ...game,
+
+        state: "playing",
+      });
     }
   };
-
 
   return (
     <>
       <div className="flex w-full items-center container mx-auto justify-center gap-4 pb-4">
-        <Button
-        size="lg"
-        className="mx-auto"
-          onClick={checkAllNamed}
-        >
+        <Button size="lg" className="mx-auto" onClick={checkAllNamed}>
           Start Game
         </Button>
       </div>
       <div className="flex flex-wrap gap-4 lg:gap-10 items-center justify-center h-full">
-      {game.players?.length === 0 && (
-        <MissConfig />
-         )}
+        {game.players?.length === 0 && <MissConfig />}
         {game.players?.map((player, index) => (
           <DialogGeneric
             title={player.name}
             subtitle="Enter your name to start the game"
             trigger={
               <Card
-                variant={player.name.includes("Player") ? reject ? "destructive" : "outline" : "valid"}
+                variant={
+                  player.name.includes("Player")
+                    ? reject
+                      ? "destructive"
+                      : "outline"
+                    : "valid"
+                }
                 className="rounded-full  w-[25vw] cursor-pointer lg:w-[15vw] @container flex items-center justify-center p-4 aspect-square"
                 key={index}
               >
@@ -58,7 +60,9 @@ export default function GameIntro() {
           >
             <div className="flex flex-col px-4 gap-4">
               <h1 className="text-2xl mx-auto border bg-primary/20 p-2 rounded-md">
-              {player.word.length > 0  ? `Your word: ${player.word}` : "Mister White"}
+                {player.word.length > 0
+                  ? `Your word: ${player.word}`
+                  : "Mister White"}
               </h1>
               <Input
                 placeholder={player.name}
@@ -72,7 +76,7 @@ export default function GameIntro() {
           </DialogGeneric>
         ))}
         <Card
-        variant='outline'
+          variant="outline"
           onClick={() => {
             setGame({
               ...game,
@@ -80,7 +84,6 @@ export default function GameIntro() {
                 ...game.options,
                 joueurs: Number(game.options.joueurs) + 1,
               },
-              
             });
           }}
           className="rounded-full w-[25vw] cursor-pointer lg:w-[15vw] @container flex items-center justify-center p-4 aspect-square"
@@ -92,16 +95,14 @@ export default function GameIntro() {
   );
 }
 
-
 const MissConfig = () => {
   return (
-<Card variant='destructive'>
-    <CardHeader>
-       Merci de revoir les parametres de la partie
-    </CardHeader>
-    <CardContent>
-       Essayer de rajouter des joueurs ou de revoir le nombre de Mister White et d&apos;intrus
-    </CardContent>
- </Card>
-  )
-}
+    <Card variant="destructive">
+      <CardHeader>Merci de revoir les parametres de la partie</CardHeader>
+      <CardContent>
+        Essayer de rajouter des joueurs ou de revoir le nombre de Mister White
+        et d&apos;intrus
+      </CardContent>
+    </Card>
+  );
+};
