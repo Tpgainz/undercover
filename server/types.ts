@@ -23,11 +23,3 @@ export type SchemaKeys = keyof typeof schemas;
 export type InferedDataTypes<T extends SchemaKeys> = ReturnType<
   typeof schemas[T]["parse"]
 >;
-
-// Type qui génère une erreur si les deux ensembles de clés ne sont pas identiques
-type ValidateKeysAreIdentical = [SchemaKeys, ActionKey] extends [
-  ActionKey,
-  SchemaKeys
-]
-  ? true
-  : never;

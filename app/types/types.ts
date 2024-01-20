@@ -1,30 +1,31 @@
 import { TSocket } from "@/lib/socket";
+import { schemas } from "@/server/shared/schema";
+import { z } from "zod";
 
-export type TPlayers = {
-  name: string;
-  word: string;
-  isAlive: boolean;
-};
+const { game, emit, gameContext, gameOptions, players } = schemas;
 
-export type TGame = {
-  players: TPlayers[];
-  options: TGameOptions;
-  state: TGameState;
-  mode?: "oneforall" | "allforone" | undefined;
-};
+export type TPlayers = z.infer<typeof players>;
 
-export type TGameOptions = {
-  joueurs: number;
-  misterWhite: number;
-  intrus: number;
-  words: string[];
-};
+export const Colors: Record<string, string> = {
+  red: "#FF0000",
+  blue: "#0000FF",
+  green: "#00FF00",
+  yellow: "#FFFF00",
+  purple: "#FF00FF",
+  orange: "#FFA500",
+  pink: "#FFC0CB",
+  brown: "#A52A2A",
+  black: "#000000",
+  white: "#FFFFFF",
+  grey: "#808080",
+  cyan: "#00FFFF",
+} as const;
 
-export type TGameContext = {
-  game: TGame;
+export type TGame = z.infer<typeof game>;
+
+export type TGameOptions = z.infer<typeof gameOptions>;
+
+export type TGameContext = z.infer<typeof gameContext> & {
   setGame: (game: TGame) => void;
   socket: TSocket | undefined;
-  isConnected: boolean;
 };
-
-type TGameState = "intro" | "playing" | "end";

@@ -8,14 +8,14 @@ import { Switch } from "@/components/ui/switch";
 import { TabsContent } from "@/components/ui/tabs";
 import { GameContext } from "@/lib/useGameContext";
 import { useSession } from "@clerk/nextjs";
-import { ClipboardCopy } from "lucide-react";
+import { ClipboardCopy, Sword, Swords } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { use, useCallback, useContext, useState } from "react";
+import { use, useCallback, useContext, useEffect, useState } from "react";
+import { TGame } from "./types/types";
+import { DialogGeneric } from "@/components/dialog";
 
 export default function GameConfig() {
-  const { game, setGame } = useContext(GameContext);
-
-  const { session, isSignedIn } = useSession();
+  const { setGame, game } = useContext(GameContext);
 
   const options = game.options;
 
@@ -26,7 +26,7 @@ export default function GameConfig() {
       "
       >
         <CardHeader className="flex flex-col  items-center">
-          <CreateGameRoom sessionId={session?.id} isSignedIn={isSignedIn} />
+          <CreateGameRoom />
         </CardHeader>
         <CardContent className="space-y-6">
           {Object.keys(options)
@@ -42,6 +42,11 @@ export default function GameConfig() {
                       .toUpperCase()}
                   </Label>
                   <Input
+                    min={
+                      key === "joueurs"
+                        ? game.options.misterWhite + game.options.intrus + 1
+                        : undefined
+                    }
                     type="number"
                     defaultValue={options[optionKey]}
                     id={key}
@@ -53,8 +58,10 @@ export default function GameConfig() {
                       );
                       setGame({
                         ...game,
-                        options: { ...options, [key]: e.target.value },
-                        state: "intro",
+                        options: {
+                          ...game.options,
+                          [optionKey]: Number(e.target.value),
+                        },
                       });
                     }}
                   />
@@ -63,19 +70,15 @@ export default function GameConfig() {
             })}
         </CardContent>
         <Separator className="w-[80%] mx-auto opacity-75" />
-        <JoinRoom sessionId={session?.id} />
+        <JoinRoom />
       </Card>
     </TabsContent>
   );
 }
 
-export function CreateGameRoom({
-  sessionId,
-  isSignedIn,
-}: {
-  sessionId?: string;
-  isSignedIn?: boolean;
-}) {
+export function CreateGameRoom() {
+  const { session, isSignedIn } = useSession();
+  const hostId = session?.user.id;
   const router = useRouter();
   const [newRoomId, setNewRoomId] = useState("");
   const { socket, isConnected, game, setGame } = useContext(GameContext);
@@ -92,10 +95,10 @@ export function CreateGameRoom({
 
   const handleEditRoom = useCallback(() => {
     if (newRoomId) {
-      socket?.emit("edit_room", { roomId: sessionId, newRoomId: newRoomId });
+      socket?.emit("edit_room", { roomId: hostId, newRoomId: newRoomId });
       updateUrlParam("room", newRoomId);
     }
-  }, [newRoomId, sessionId, socket, updateUrlParam]);
+  }, [newRoomId, hostId, socket, updateUrlParam]);
 
   const handlenewRoomIdChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -110,9 +113,9 @@ export function CreateGameRoom({
         if (isSignedIn) {
           setGame({ ...game, mode: "allforone" });
           socket?.connect();
-          socket?.emit("create_room", { roomId: sessionId });
+          socket?.emit("create_room", { roomId: hostId });
 
-          updateUrlParam("room", sessionId!);
+          updateUrlParam("room", hostId!);
         } else {
           router.push("/sign-in");
         }
@@ -122,32 +125,18 @@ export function CreateGameRoom({
         updateUrlParam("room", "");
       }
     },
-    [game, isSignedIn, router, sessionId, setGame, socket, updateUrlParam]
+    [game, isSignedIn, router, hostId, setGame, socket, updateUrlParam]
   );
 
   const copyToClipboard = useCallback(() => {
     navigator.clipboard.writeText(window.location.href);
   }, []);
 
-  const roomId = useSearchParams().get("room");
-
-  const deduceHost = useCallback(() => {
-    const isHost = sessionId === roomId;
-    const isMultiAndotHost = isConnected && !isHost;
-
-    return { isHost, isMultiAndotHost };
-  }, [isConnected, sessionId, roomId]);
+  console.log(game);
 
   return (
     <>
-      {deduceHost().isMultiAndotHost && (
-        <div className="absolute z-50 h-full rounded-xl flex flex-col gap-4 w-full items-center justify-center inset-0 bg-white/50 backdrop-blur-sm">
-          <h1 className="text-2xl font-bold ">Waiting for host</h1>
-          <p className="text-sm">Please wait for the host to start the game</p>
-        </div>
-      )}
-
-      <div className="flex w-full  items-center justify-between space-y-2">
+      <div className="flex w-full  items-center relative justify-between space-y-2">
         <CardTitle>Game Config</CardTitle>
         <div className="flex items-center space-x-2">
           <Switch
@@ -166,7 +155,7 @@ export function CreateGameRoom({
           <div className="relative w-full">
             <Input
               disabled
-              defaultValue={sessionId}
+              defaultValue={hostId}
               onChange={handlenewRoomIdChange}
             />
             <ClipboardCopy
@@ -177,15 +166,17 @@ export function CreateGameRoom({
             />
           </div>
           <Button onClick={handleEditRoom}>Edit</Button>
+          {isConnected && <WaitingRoom />}
         </div>
       )}
     </>
   );
 }
 
-export function JoinRoom({ sessionId }: { sessionId?: string }) {
+export function JoinRoom() {
   const { socket, isConnected } = useContext(GameContext);
   const [inputValue, setInputValue] = useState("");
+  const { session } = useSession();
 
   const handleJoinRoom = useCallback(() => {
     if (inputValue) {
@@ -195,21 +186,17 @@ export function JoinRoom({ sessionId }: { sessionId?: string }) {
 
   const roomId = useSearchParams().get("room");
 
-  const deduceHost = useCallback(() => {
-    const isHost = sessionId === roomId;
-    const isMultiAndotHost = isConnected && !isHost;
+  const lobby = useCallback(() => {
+    const isHost = session?.user.id === roomId;
+    const isGuest = isConnected && !isHost;
 
-    return { isHost, isMultiAndotHost };
-  }, [isConnected, sessionId, roomId]);
+    return { isHost, isGuest };
+  }, [isConnected, roomId, session]);
 
   return (
     <>
       <CardHeader className="flex flex-col">
-        <CardTitle
-          className={
-            !deduceHost().isMultiAndotHost ? "opacity-50 " : "opacity-100"
-          }
-        >
+        <CardTitle className={isConnected ? "opacity-50 " : "opacity-100"}>
           Join Room
         </CardTitle>
       </CardHeader>
@@ -217,7 +204,7 @@ export function JoinRoom({ sessionId }: { sessionId?: string }) {
         <div className="flex gap-2">
           <Input
             disabled={isConnected}
-            defaultValue={deduceHost().isMultiAndotHost ? roomId ?? "" : ""}
+            defaultValue={lobby().isGuest ? roomId ?? "" : ""}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Room ID or game URL"
           />
@@ -227,5 +214,56 @@ export function JoinRoom({ sessionId }: { sessionId?: string }) {
         </div>
       </CardContent>
     </>
+  );
+}
+
+export function WaitingRoom() {
+  const { game } = useContext(GameContext);
+
+  return (
+    <DialogGeneric
+      trigger={
+        <Button
+          size="icon"
+          //Check if all players are connected and their name are !== Player
+          variant={
+            game.players.every(
+              (player) => player.isConnected && player.name !== "Player"
+            )
+              ? "greenOutline"
+              : "default"
+          }
+        >
+          <Swords size={20} />
+        </Button>
+      }
+      title="Waiting Room"
+      subtitle="Waiting for all the players to be ready, you can set ready by going to the game tab and pick up a Player card and rename it to your name"
+    >
+      <Card>
+        <CardHeader>
+          <CardTitle>Waiting Room</CardTitle>
+        </CardHeader>
+
+        <CardContent>
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {game.players.map((player) => (
+              <div
+                key={player.name}
+                className="flex items-center w-[120px] gap-2 "
+              >
+                <div
+                  className={`w-4 h-4 rounded-full ${
+                    player.isConnected ? "bg-green-500" : "bg-red-500"
+                  }`}
+                />
+
+                <p className="truncate ...">{player.name}</p>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </DialogGeneric>
   );
 }

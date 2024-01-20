@@ -20,35 +20,42 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const [isConnected, setIsConnected] = useState<boolean>(false);
 
   useEffect(() => {
-    if (game.mode === "allforone") {
+    async function fetchMyAPI() {
       const newSocket = io("http://localhost:3001");
       setSocket(newSocket);
+      if (game.mode === "allforone") {
+        newSocket.on("connect", () => {
+          console.log("Connected to server");
+          setIsConnected(true);
+        });
 
-      newSocket.on("connect", () => {
-        console.log("Connected to server");
-        setIsConnected(true);
-      });
+        try {
+          const res = await newSocket.timeout(50).emitWithAck("game", game);
+          console.log(res, "res");
+        } catch (error) {
+          console.log(error);
+        } finally {
+          newSocket.on("game_update", (game: TGame) => {
+            setGame(game);
+          });
+        }
 
-      newSocket.on("disconnect", () => {
-        console.log("Disconnected from server");
-        setIsConnected(false);
-      });
+        newSocket.on("disconnect", () => {
+          console.log("Disconnected from server");
+          setIsConnected(false);
+        });
 
-      // Gestionnaire d'événement pour la mise à jour du jeu depuis le serveur
-      newSocket.on("game_update", (updatedGame: TGame) => {
-        setGame(updatedGame);
-      });
-
-      return () => {
-        newSocket.off("edit_room");
-        newSocket.off("create_room");
-        newSocket.off("connect");
-        newSocket.off("disconnect");
-        newSocket.off("game_update");
-        newSocket.close();
-      };
+        return () => {
+          newSocket.off("edit_room");
+          newSocket.off("create_room");
+          newSocket.off("connect");
+          newSocket.off("disconnect");
+          newSocket.close();
+        };
+      }
     }
-  }, [game.mode]);
+    fetchMyAPI();
+  }, [game]);
 
   useEffect(() => {
     setGame((prevGame) => {

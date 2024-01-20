@@ -1,19 +1,21 @@
 import { TGame } from "@/app/types/types";
 
 export function createPlayers(game: TGame) {
-  if (!game.players.length) {
-    return [];
-  }
-
   const totalPlayers = game.players.length;
-  const maxSpecialRoles =
-    Number(game.options.misterWhite) + Number(game.options.intrus);
+  console.log("totalPlayers", totalPlayers);
+  const maxSpecialRoles = game.options.misterWhite + game.options.intrus;
 
   if (totalPlayers - 1 < maxSpecialRoles) {
     console.error(
       "Le nombre total de joueurs est inférieur à la somme de misterWhite et intrus."
     );
-    return [];
+    //Build an array of players with the minimum number of players
+    const playersNumber = game.options.intrus + game.options.misterWhite + 1;
+    return Array.from(Array(playersNumber).keys()).map((i) => ({
+      name: "Player " + (i + 1),
+      word: "",
+      isAlive: true,
+    }));
   }
 
   // Création d'une liste de rôles basée sur les options de jeu
