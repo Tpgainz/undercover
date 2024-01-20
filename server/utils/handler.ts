@@ -19,6 +19,7 @@ export const socketHandler = (socket: Socket) => {
 const delegateAction = (socket: Socket, actionType: ActionKey, data: any) => {
   const action = Actions[actionType];
   if (action) {
+    console.log("Action:", actionType);
     ensureData(socket, () => action(socket, data));
   } else {
     console.error("No handler found for action:", actionType);

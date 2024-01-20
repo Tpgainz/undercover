@@ -8,11 +8,11 @@ const cardVariants = cva("duration-200 text-input-foreground", {
   variants: {
     variant: {
       default: "bg-card border-card border",
-      outline:
-        "bg-input/30 hover:bg-input/40 border-muted-foreground border",
+      outline: "bg-input/30 hover:bg-input/40 border-muted-foreground border",
       destructive: "bg-red-400/30 hover:bg-red-500/40 border border-red-700",
-      valid:
-        " bg-green-400/30 hover:bg-green-500/40 border border-green-700",
+      valid: " bg-green-400/30 hover:bg-green-500/40 border border-green-700",
+      currentValid:
+        "bg-green-400/50 hover:bg-green-500/60 border border-green-800",
     },
   },
   defaultVariants: {

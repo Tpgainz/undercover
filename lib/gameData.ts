@@ -54,4 +54,5 @@ export const defaultGame = cachedGame() ?? {
     words: pickRandomWords(),
   },
   state: "intro",
+  mode: "oneforall",
 };
