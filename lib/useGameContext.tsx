@@ -20,42 +20,38 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const [isConnected, setIsConnected] = useState<boolean>(false);
 
   useEffect(() => {
-    async function fetchMyAPI() {
+    if (game.mode === "allforone") {
+      // Établir la connexion WebSocket uniquement en mode allforone
       const newSocket = io("http://localhost:3001");
       setSocket(newSocket);
-      if (game.mode === "allforone") {
-        newSocket.on("connect", () => {
-          console.log("Connected to server");
-          setIsConnected(true);
-        });
 
-        try {
-          const res = await newSocket.timeout(50).emitWithAck("game", game);
-          console.log(res, "res");
-        } catch (error) {
-          console.log(error);
-        } finally {
-          newSocket.on("game_update", (game: TGame) => {
-            setGame(game);
-          });
-        }
+      newSocket.on("connect", () => {
+        console.log("Connected to server");
+        setIsConnected(true);
+      });
 
-        newSocket.on("disconnect", () => {
-          console.log("Disconnected from server");
-          setIsConnected(false);
-        });
+      newSocket.on("game_update", (updatedGame: TGame) => {
+        setGame(updatedGame);
+      });
 
-        return () => {
-          newSocket.off("edit_room");
-          newSocket.off("create_room");
-          newSocket.off("connect");
-          newSocket.off("disconnect");
-          newSocket.close();
-        };
-      }
+      newSocket.on("disconnect", () => {
+        console.log("Disconnected from server");
+        setIsConnected(false);
+      });
+
+      return () => {
+        newSocket.off("edit_room");
+        newSocket.off("create_room");
+        newSocket.off("connect");
+        newSocket.off("disconnect");
+        newSocket.close();
+      };
     }
-    fetchMyAPI();
-  }, [game]);
+  }, [game.mode]); // Dépendance : game.mode
+
+  useEffect(() => {
+    socket?.emit("game_update", game);
+  }, [game, socket]);
 
   useEffect(() => {
     setGame((prevGame) => {
