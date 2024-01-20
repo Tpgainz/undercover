@@ -3,13 +3,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { GameContext } from "@/lib/useGameContext";
-import { useSearchParams } from "next/navigation";
 import { useContext, useState } from "react";
+import { TPlayers } from "../types/types";
 
 export default function GameIntro() {
   const { game, setGame } = useContext(GameContext);
 
   const [reject, setReject] = useState(false);
+
+  const savedPlayerName = sessionStorage.getItem("playerName");
+
+  const isCurrentPlayer = (playerName: string) => {
+    return savedPlayerName === playerName;
+  };
 
   const checkAllNamed = () => {
     const allNamed = game.players.every(
@@ -26,6 +32,32 @@ export default function GameIntro() {
     }
   };
 
+  const handleNameChange = (index: number, newName: string) => {
+    const uniqueName = generateUniqueName(newName, game.players);
+
+    const newPlayers = game.players.map((player, idx) =>
+      idx === index
+        ? { ...player, name: uniqueName, isConnected: true }
+        : player
+    );
+
+    setGame({ ...game, players: newPlayers });
+
+    // Sauvegarde le nom unique dans sessionStorage
+    sessionStorage.setItem("playerName", uniqueName);
+  };
+
+  // Ajouter un joueur
+  const addPlayer = () => {
+    setGame({
+      ...game,
+      players: [
+        ...game.players,
+        { name: `Player ${game.players.length + 1}`, word: "", isAlive: true },
+      ],
+    });
+  };
+
   return (
     <>
       <div className="flex w-full items-center container mx-auto justify-center gap-4 pb-4">
@@ -38,7 +70,11 @@ export default function GameIntro() {
         {game.players?.map((player, index) => (
           <DialogGeneric
             title={player.name}
-            subtitle="Enter your name to start the game"
+            subtitle={
+              isCurrentPlayer(player.name)
+                ? "Fill up your name"
+                : " Here you can see your friends infos"
+            }
             trigger={
               <Card
                 variant={
@@ -58,34 +94,25 @@ export default function GameIntro() {
             }
             key={index}
           >
-            <div className="flex flex-col px-4 gap-4">
-              <h1 className="text-2xl mx-auto border bg-primary/20 p-2 rounded-md">
-                {player.word.length > 0
-                  ? `Your word: ${player.word}`
-                  : "Mister White"}
-              </h1>
-              <Input
-                placeholder={player.name}
-                onChange={(e) => {
-                  const newPlayers = [...game.players];
-                  newPlayers[index].name = e.target.value;
-                  setGame({ ...game, players: newPlayers });
-                }}
-              />
-            </div>
+            {isCurrentPlayer(player.name) &&
+              !player.name.includes("Player") && (
+                <div className="flex flex-col px-4 gap-4">
+                  <h1 className="text-2xl mx-auto border bg-primary/20 p-2 rounded-md">
+                    {player.word.length > 0
+                      ? `Your word: ${player.word}`
+                      : "Mister White"}
+                  </h1>
+                  <Input
+                    placeholder={player.name}
+                    onChange={(e) => handleNameChange(index, e.target.value)}
+                  />
+                </div>
+              )}
           </DialogGeneric>
         ))}
         <Card
           variant="outline"
-          onClick={() => {
-            setGame({
-              ...game,
-              options: {
-                ...game.options,
-                joueurs: Number(game.options.joueurs) + 1,
-              },
-            });
-          }}
+          onClick={addPlayer}
           className="rounded-full w-[25vw] cursor-pointer lg:w-[15vw] @container flex items-center justify-center p-4 aspect-square"
         >
           <CardTitle className="text-xl lg:text-4xl">+</CardTitle>
@@ -105,4 +132,17 @@ const MissConfig = () => {
       </CardContent>
     </Card>
   );
+};
+
+const generateUniqueName = (proposedName: string, players: TPlayers[]) => {
+  let uniqueName = proposedName;
+  let count = 1;
+
+  // Vérifie si le nom proposé existe déjà et ajuste le nom avec un index
+  while (players.some((player) => player.name === uniqueName)) {
+    uniqueName = `${proposedName} (${count})`;
+    count++;
+  }
+
+  return uniqueName;
 };
