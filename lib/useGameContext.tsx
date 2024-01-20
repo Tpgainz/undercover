@@ -50,7 +50,19 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   }, [game.mode]); // Dépendance : game.mode
 
   useEffect(() => {
-    socket?.emit("game_update", game);
+    async function getGame() {
+      try {
+        const res = await socket?.timeout(50).emitWithAck("game", game);
+        console.log(res, "res");
+      } catch (error) {
+        console.log(error);
+      } finally {
+        socket?.on("game_update", (game: TGame) => {
+          setGame(game);
+        });
+      }
+    }
+    getGame();
   }, [game, socket]);
 
   useEffect(() => {
