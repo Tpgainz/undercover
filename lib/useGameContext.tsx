@@ -22,7 +22,9 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const gameRef = useRef(game);
 
   useEffect(() => {
-    const newSocket = io("http://localhost:3001");
+    const newSocket = io("http://localhost:3001", {
+      autoConnect: false,
+    });
     setSocket(newSocket);
 
     newSocket.on("connect", () => {
@@ -76,8 +78,6 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
         game.state !== gameRef.current.state ||
         game.players.map((player) => player.name).join() !==
           gameRef.current.players.map((player) => player.name).join());
-    // Vérifier si les joueurs ont chan
-    // Autres parties de 'game' à vérifier
 
     if (shouldEmitUpdate && socket && isConnected) {
       socket.emit("game", game);
