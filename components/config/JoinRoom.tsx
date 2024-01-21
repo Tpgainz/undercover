@@ -13,6 +13,8 @@ export function JoinRoom() {
 
   const handleJoinRoom = useCallback(() => {
     if (inputValue) {
+      socket?.connect();
+      console.log("Joining room", inputValue);
       socket?.emit("join_room", { roomId: inputValue });
     }
   }, [inputValue, socket]);
@@ -38,13 +40,14 @@ export function JoinRoom() {
           <Input
             disabled={isConnected}
             defaultValue={lobby().isGuest ? roomId ?? "" : ""}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={(e) => {setInputValue(e.target.value), window.history.replaceState({}, "", `?room=${e.target.value}`)}}
             placeholder="Room ID or game URL"
           />
           <Button onClick={handleJoinRoom} disabled={isConnected}>
             Join
           </Button>
         </div>
+        
       </CardContent>
     </>
   );

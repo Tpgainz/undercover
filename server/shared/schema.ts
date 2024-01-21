@@ -11,7 +11,6 @@ const editRoomSchema = z.object({
 
 const joinRoomSchema = z.object({
   roomId: z.string(),
-  playerName: z.string(),
 });
 
 const emitSchema = z.object({
@@ -39,6 +38,7 @@ const gameSchema = z.object({
   host: z.string().optional(),
   state: z.union([z.literal("intro"), z.literal("playing"), z.literal("end")]),
   mode: z.union([z.literal("oneforall"), z.literal("allforone")]).optional(),
+  roomId: z.string().optional(),
 });
 
 const TGameContextSchema = z.object({

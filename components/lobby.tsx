@@ -1,13 +1,13 @@
 import { GameContext } from "@/lib/useGameContext";
 import { Ban, Swords } from "lucide-react";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { DialogGeneric } from "./dialog";
 import { Button } from "./ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 import { Label } from "./ui/label";
 
 export function Lobby() {
-  const { game, setGame } = useContext(GameContext);
+  const { game, setGame, socket } = useContext(GameContext);
 
   function kickPlayer(playerName: string) {
     const newPlayers = game.players.filter(
