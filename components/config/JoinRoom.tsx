@@ -1,7 +1,7 @@
 import { GameContext } from "@/lib/useGameContext";
 import { useSession } from "@clerk/nextjs";
 import { useSearchParams } from "next/navigation";
-import { useContext, useState, useCallback } from "react";
+import { useContext, useState, useCallback, useEffect } from "react";
 import { Button } from "../ui/button";
 import { CardHeader, CardTitle, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
@@ -40,14 +40,16 @@ export function JoinRoom() {
           <Input
             disabled={isConnected}
             defaultValue={lobby().isGuest ? roomId ?? "" : ""}
-            onChange={(e) => {setInputValue(e.target.value), window.history.replaceState({}, "", `?room=${e.target.value}`)}}
+            onChange={(e) => {
+              setInputValue(e.target.value),
+                window.history.replaceState({}, "", `?room=${e.target.value}`);
+            }}
             placeholder="Room ID or game URL"
           />
           <Button onClick={handleJoinRoom} disabled={isConnected}>
             Join
           </Button>
         </div>
-        
       </CardContent>
     </>
   );

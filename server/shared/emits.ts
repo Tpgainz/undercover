@@ -21,8 +21,8 @@ const Actions = {
     const { roomId } = inferData("join_room", data);
     socket.join(roomId);
     socket.in(roomId).emit("room_joined", { roomId });
-    socket.emit("roomUsersList", socket.rooms);
     console.log(socket.rooms);
+
     console.log(socket.id, "joined", roomId);
   },
   emit: (socket: Socket, data: InferedDataTypes<"emit">) => {
@@ -36,7 +36,7 @@ const Actions = {
     console.log("game_update", options, players, state, mode, "from server");
   },
   players: (socket: Socket, data: InferedDataTypes<"players">) => {
-    const { name, word, isAlive,  } = inferData("players", data);
+    const { name, word, isAlive } = inferData("players", data);
     socket.emit("players_update", { name, word, isAlive });
     console.log("players_update", name, word, isAlive);
   },
