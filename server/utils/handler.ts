@@ -21,8 +21,6 @@ const delegateAction = (socket: Socket, actionType: ActionKey, data: any) => {
   if (action) {
     console.log("Action:", actionType);
     ensureData(socket, () => action(socket, data));
-    console.table(socket.rooms
-    );    
   } else {
     console.error("No handler found for action:", actionType);
   }

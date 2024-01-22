@@ -46,15 +46,11 @@ export default function Home() {
 
 const GameFlow = {
   intro: GameIntro,
-  // playing: GameRound,
-  // end: GameEnd,
+  playing: GameRound,
+  end: GameEnd,
 };
 
 function Game() {
   const { state } = useContext(GameContext).game;
-  return (
-    <TabsContent value="game">
-      <GameIntro />
-    </TabsContent>
-  );
+  return <TabsContent value="game">{GameFlow[state]()}</TabsContent>;
 }

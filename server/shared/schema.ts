@@ -35,7 +35,6 @@ const gameOptionsSchema = z.object({
 const gameSchema = z.object({
   players: z.array(playerSchema),
   options: gameOptionsSchema,
-  host: z.string().optional(),
   state: z.union([z.literal("intro"), z.literal("playing"), z.literal("end")]),
   mode: z.union([z.literal("oneforall"), z.literal("allforone")]).optional(),
   roomId: z.string().optional(),
