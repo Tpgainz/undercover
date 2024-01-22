@@ -9,18 +9,28 @@ import { useContext } from "react";
 
 import { CreateGameHeader } from "@/components/config/CreateGameHeader";
 import { JoinRoom } from "@/components/config/JoinRoom";
+import { useSession } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
+import NotHostConfig from "@/components/not-host-config";
 
 export default function GameConfig() {
-  const { setGame, game } = useContext(GameContext);
+  const { session } = useSession();
+  const { setGame, game, isConnected } = useContext(GameContext);
 
   const options = game.options;
+
+  const isHost = session?.user.id === game.roomId;
 
   return (
     <TabsContent className="flex  h-full justify-center" value="config">
       <Card
         className="relative mx-4 max-w-lg w-full
-      "
+        "
       >
+        {isConnected && !isHost && (
+          <NotHostConfig shareLink={window.location.href} />
+        )}
+
         <CardHeader className="flex flex-col  items-center">
           <CreateGameHeader />
         </CardHeader>

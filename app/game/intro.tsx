@@ -29,9 +29,15 @@ export default function GameIntro() {
   const addPlayer = () => {
     setGame({
       ...game,
+      options: { ...game.options, joueurs: game.options.joueurs + 1 },
       players: [
-        ...game.players,
-        { name: `Player ${game.players.length + 1}`, word: "", isAlive: true },
+        ...game.players, // Ajouter un nouveau joueur
+        {
+          name: `Player ${game.players.length + 1}`,
+          isAlive: true,
+          isConnected: false,
+          word: "",
+        },
       ],
     });
   };
@@ -207,16 +213,14 @@ const AllForOneInfos = ({
         className="flex flex-col px-4 
         gap-4"
       >
-        <h1
-          className="text-2xl mx-auto bg-input p-2 rounded-lg
+        {(isCurrentPlayer || !player.isAlive) && (
+          <h1
+            className="text-2xl mx-auto bg-input p-2 rounded-lg
            ..."
-        >
-          {isCurrentPlayer || !player.isAlive
-            ? player.word.length > 0
-              ? `${player.word}`
-              : "Mister White"
-            : null}
-        </h1>
+          >
+            {player.word.length > 0 ? `${player.word}` : "Mister White"}
+          </h1>
+        )}
 
         <Input
           placeholder={player.name}

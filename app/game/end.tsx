@@ -28,7 +28,8 @@ export function GameEnd() {
       ...game,
       players: newRandomPlayers,
       options: { ...game.options, words: newRandomWords },
-
+      mode: game.mode,
+      roomId: game.roomId,
       state: "intro",
     });
   }

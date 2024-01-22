@@ -43,7 +43,7 @@ const GameBoard = ({
         state: "end",
       });
     }
-  }, [game.players, setGame]);
+  }, [game.players]);
 
   //Pick a random crewmate (alive) to start the game
   const startingPlayer = game.players.findIndex(
