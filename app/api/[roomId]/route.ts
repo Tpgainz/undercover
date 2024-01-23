@@ -6,17 +6,8 @@ export default function GET(
   { params }: { params: { roomId: string } }
 ) {
   if (!globalGames[params.roomId]) {
-    return new Response(
-      JSON.stringify({
-        message: "Room not found",
-      }),
-      {
-        headers: { "content-type": "application/json" },
-      }
-    );
+    return Response.json({ error: "Room not found" }, { status: 404 });
   }
 
-  return new Response(JSON.stringify(globalGames[params.roomId]), {
-    headers: { "content-type": "application/json" },
-  });
+  return Response.json(globalGames[params.roomId].state);
 }
