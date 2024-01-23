@@ -7,6 +7,7 @@ import { TPlayers } from "../types/types";
 import { Card, CardTitle } from "@/components/ui/card";
 import { determineRole } from "@/lib/determineRole";
 import { GameContext } from "@/lib/useGameContext";
+import { getUniqueName } from "@/lib/getUniqueName";
 
 export const RoleCard = ({
   player,
@@ -32,20 +33,21 @@ export const RoleCard = ({
 
   console.log(player.name, sessionName, isCurrentPlayer, avaliable);
 
-  const onlineSave = !isCurrentPlayer || avaliable;
-
   const handleChangeName = () => {
-    if (name.length > 0) {
-      sessionStorage.setItem("playerName", name);
-      setGame({
-        ...game,
-        players: [
-          ...game.players.slice(0, index),
-          { ...game.players[index], name },
-          ...game.players.slice(index + 1),
-        ],
-      });
-    }
+    const uniqueName = getUniqueName(name, game.players);
+
+    const newPlayers = game.players.map((player, idx) =>
+      idx === index
+        ? { ...player, name: uniqueName, isConnected: true }
+        : player
+    );
+
+    mode === "allforone" && sessionStorage.setItem("playerName", uniqueName);
+
+    setGame({
+      ...game,
+      players: newPlayers,
+    });
   };
 
   return (
@@ -55,7 +57,11 @@ export const RoleCard = ({
         <Button
           variant="greenOutline"
           onClick={handleChangeName}
-          disabled={name.length === 0 || (mode === "allforone" && onlineSave)}
+          disabled={
+            mode === "allforone" &&
+            !isCurrentPlayer &&
+            !player.name.includes("Player")
+          }
         >
           Save
         </Button>
@@ -94,22 +100,21 @@ const AllForOneInfos = ({
   setName: (arg0: string) => void;
 }) => {
   return (
-    (isCurrentPlayer || avaliable) && (
-      <div
-        className="flex flex-col px-4 
+    <div
+      className="flex flex-col px-4 
           gap-4"
-      >
-        {(isCurrentPlayer || !player.isAlive) && (
-          <ShowWord disabled={!isCurrentPlayer} word={player.word} />
-        )}
+    >
+      <ShowWord
+        disabled={!isCurrentPlayer && !player.name.includes("Player")}
+        word={player.word}
+      />
 
-        <Input
-          disabled={!isCurrentPlayer}
-          placeholder={player.name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </div>
-    )
+      <Input
+        disabled={!isCurrentPlayer && !player.name.includes("Player")}
+        placeholder={player.name}
+        onChange={(e) => setName(e.target.value)}
+      />
+    </div>
   );
 };
 

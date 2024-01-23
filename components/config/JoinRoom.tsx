@@ -19,6 +19,19 @@ export function JoinRoom() {
     }
   }, [inputValue, socket]);
 
+  useEffect(() => {
+    async function fetchRoom() {
+      fetch(`/api/${inputValue}`, {
+        method: "PGET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
+
+    fetchRoom();
+  }, [inputValue]);
+
   const roomId = useSearchParams().get("room");
 
   const lobby = useCallback(() => {
