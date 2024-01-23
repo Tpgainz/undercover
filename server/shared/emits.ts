@@ -1,8 +1,7 @@
 import { Socket } from "socket.io";
 import { InferedDataTypes } from "../types";
 import { inferData } from "../utils/infer-data";
-
-const globalGames: Record<string, InferedDataTypes<"game">> = {};
+import { globalGames } from "../data";
 
 const Actions = {
   edit_room: (socket: Socket, data: InferedDataTypes<"edit_room">) => {

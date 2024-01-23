@@ -57,7 +57,7 @@ export function DialogGeneric({
         open={open}
         onOpenChange={enabled ? setOpen : open ? setOpen : undefined}
       >
-        <DialogTrigger asChild>{trigger}</DialogTrigger>
+        <DialogTrigger>{trigger}</DialogTrigger>
         <DialogContent className="sm:max-w-[425px] ">
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>

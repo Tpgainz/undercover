@@ -1,14 +1,8 @@
-"use client";
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useContext } from "react";
-import { GameContext } from "@/lib/useGameContext";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Rules from "./rules";
 import GameConfig from "./config";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import GameIntro from "./game/intro";
-import GameRound from "./game/game";
-import { GameEnd } from "./game/end";
+import { Game } from "./game/game";
 
 /*
  * This is a game where each player has a word and the objective is to find the intruders.
@@ -26,8 +20,7 @@ export default function Home() {
   return (
     <Tabs
       defaultValue="rules"
-      className="w-full flex  flex-col bganimate h-[100dvh] bg-gradient-to-r from-primary/70 to-primary/80
-    "
+      className="w-full flex  flex-col bganimate h-[100dvh] bg-gradient-to-r from-primary/70 to-primary/80 "
     >
       <TabsList className="w-full flex bg-transparent justify-around">
         <TabsTrigger value="rules">Rules</TabsTrigger>
@@ -42,15 +35,4 @@ export default function Home() {
       </ScrollArea>
     </Tabs>
   );
-}
-
-const GameFlow = {
-  intro: GameIntro,
-  playing: GameRound,
-  end: GameEnd,
-};
-
-function Game() {
-  const { state } = useContext(GameContext).game;
-  return <TabsContent value="game">{GameFlow[state]()}</TabsContent>;
 }
