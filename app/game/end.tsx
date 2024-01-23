@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { GameContext } from "@/lib/useGameContext";
 import { useContext } from "react";
@@ -12,7 +13,7 @@ import {
 import { pickRandomWords } from "@/lib/gameData";
 import { createPlayers } from "@/lib/createPlayers";
 
-export function GameEnd() {
+export default function GameEnd() {
   const { game, setGame } = useContext(GameContext);
 
   const winner = areAllintrudersDead(game)

@@ -1,7 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
-export const ShowWord = ({ word }: { word: string }) => {
+export const ShowWord = ({
+  word,
+  disabled = false,
+}: {
+  word: string;
+  disabled?: boolean;
+}) => {
   const [showWord, setShowWord] = useState(false);
 
   if (!word) {
@@ -10,6 +16,7 @@ export const ShowWord = ({ word }: { word: string }) => {
 
   return (
     <Button
+      disabled={disabled}
       variant="secondary"
       onClick={() => {
         setShowWord(!showWord);
