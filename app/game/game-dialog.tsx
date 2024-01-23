@@ -87,13 +87,11 @@ const AllForOneInfos = ({
   avaliable,
   player,
   setName,
-  mode,
 }: {
   isCurrentPlayer: boolean;
   avaliable: boolean;
   player: TPlayers;
   setName: (arg0: string) => void;
-  mode: string;
 }) => {
   return (
     (isCurrentPlayer || avaliable) && (
@@ -118,11 +116,9 @@ const AllForOneInfos = ({
 const OneForAllInfos = ({
   player,
   setName,
-  isCurrentPlayer,
 }: {
   player: TPlayers;
   setName: (arg0: string) => void;
-  isCurrentPlayer: boolean;
 }) => {
   return (
     <>
