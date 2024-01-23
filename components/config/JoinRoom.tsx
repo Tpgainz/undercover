@@ -7,7 +7,7 @@ import { CardHeader, CardTitle, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
 
 export function JoinRoom() {
-  const { socket, isConnected } = useContext(GameContext);
+  const { socket, isConnected, setGame } = useContext(GameContext);
   const [inputValue, setInputValue] = useState("");
   const { session } = useSession();
 
@@ -21,14 +21,15 @@ export function JoinRoom() {
 
   useEffect(() => {
     async function fetchRoom() {
-      fetch(`/api/${inputValue}`, {
+      const res = await fetch(`/api/${inputValue}`, {
         method: "PGET",
         headers: {
           "Content-Type": "application/json",
         },
       });
+      const data = await res.json();
+      setGame(data);
     }
-
     fetchRoom();
   }, [inputValue]);
 
