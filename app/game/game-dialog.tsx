@@ -23,15 +23,8 @@ export const RoleCard = ({
   const [name, setName] = useState(player.name);
   const sessionName = sessionStorage.getItem("playerName");
   const isCurrentPlayer = sessionName === player.name;
-  console.log(
-    player.name,
-    sessionName,
-    isCurrentPlayer,
-    "player.namen, sessionName, isCurrentPlayer"
-  );
-  const avaliable = !sessionName && player.name.includes("Player");
 
-  console.log(player.name, sessionName, isCurrentPlayer, avaliable);
+  const avaliable = !sessionName && player.name.includes("Player");
 
   const handleChangeName = () => {
     const uniqueName = getUniqueName(name, game.players);
@@ -58,9 +51,10 @@ export const RoleCard = ({
           variant="greenOutline"
           onClick={handleChangeName}
           disabled={
-            mode === "allforone" &&
-            !isCurrentPlayer &&
-            !player.name.includes("Player")
+            (mode === "allforone" &&
+              !isCurrentPlayer &&
+              !player.name.includes("Player")) ||
+            (player.name.includes("Player") && !avaliable)
           }
         >
           Save
@@ -99,18 +93,18 @@ const AllForOneInfos = ({
   player: TPlayers;
   setName: (arg0: string) => void;
 }) => {
+  const isRestricted =
+    (!isCurrentPlayer && !player.name.includes("Player")) ||
+    (player.name.includes("Player") && !avaliable);
   return (
     <div
       className="flex flex-col px-4 
           gap-4"
     >
-      <ShowWord
-        disabled={!isCurrentPlayer && !player.name.includes("Player")}
-        word={player.word}
-      />
+      <ShowWord disabled={isRestricted} word={player.word} />
 
       <Input
-        disabled={!isCurrentPlayer && !player.name.includes("Player")}
+        disabled={isRestricted}
         placeholder={player.name}
         onChange={(e) => setName(e.target.value)}
       />
