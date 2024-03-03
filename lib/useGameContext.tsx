@@ -14,6 +14,7 @@ export const GameContext = createContext<TGameContext>({
   socket: undefined,
   isConnected: false,
 });
+
 export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const [game, setGame] = useState(defaultGame);
   const [socket, setSocket] = useState<TSocket>();

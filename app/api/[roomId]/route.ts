@@ -1,13 +1,21 @@
 import { globalGames } from "@/server/data";
 
-export default function GET(
+export function GET(
   req: Request,
   res: Response,
   { params }: { params: { roomId: string } }
 ) {
-  if (!globalGames[params.roomId]) {
+  if (!params) {
+    return Response.json({ error: "Room not found" }, { status: 404 });
+  }
+  const roomId = params.roomId;
+  if (!roomId) {
     return Response.json({ error: "Room not found" }, { status: 404 });
   }
 
-  return Response.json(globalGames[params.roomId].state);
+  if (!globalGames[roomId]) {
+    return Response.json({ error: "Party data not found" }, { status: 404 });
+  }
+
+  return Response.json(globalGames[roomId].state);
 }

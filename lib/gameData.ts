@@ -36,6 +36,7 @@ const cachedGame = () => {
     return;
   }
 
+  console.log("cachedGame", window.sessionStorage.getItem("game"));
   return (window.sessionStorage.getItem("game") &&
     JSON.parse(sessionStorage.getItem("game")!)) as TGame;
 };

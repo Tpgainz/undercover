@@ -5,6 +5,7 @@ import { useContext, useState, useCallback, useEffect } from "react";
 import { Button } from "../ui/button";
 import { CardHeader, CardTitle, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
+import { TGame } from "@/app/types/types";
 
 export function JoinRoom() {
   const { socket, isConnected, setGame } = useContext(GameContext);
@@ -20,18 +21,20 @@ export function JoinRoom() {
   }, [inputValue, socket]);
 
   useEffect(() => {
+    if (!inputValue) return;
     async function fetchRoom() {
       const res = await fetch(`/api/${inputValue}`, {
-        method: "PGET",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       });
-      const data = await res.json();
+      const data = (await res.json()) as TGame;
+      console.log("Room data", data);
       setGame(data);
     }
     fetchRoom();
-  }, [inputValue]);
+  }, [handleJoinRoom]);
 
   const roomId = useSearchParams().get("room");
 
