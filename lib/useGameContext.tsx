@@ -23,7 +23,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const gameRef = useRef(game);
 
   useEffect(() => {
-    const newSocket = io(process.env.SOCKET_ORIGIN ?? "http://localhost:3001", {
+    const newSocket = io(process.env.SOCKET_ORIGIN, {
       autoConnect: false,
     });
     setSocket(newSocket);
