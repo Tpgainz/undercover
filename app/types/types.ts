@@ -1,8 +1,8 @@
 import { TSocket } from "@/lib/socket";
-import { schemas } from "@/server/shared/schema";
+import { schemas } from "@tpgainz/undercover-lib";
 import { z } from "zod";
 
-const { game, emit, gameContext, gameOptions, players } = schemas;
+const { game,  gameContext, gameOptions, players } = schemas;
 
 export type TPlayers = z.infer<typeof players>;
 
@@ -28,3 +28,4 @@ export type TGameOptions = z.infer<typeof gameOptions>;
 export type TGameContext = z.infer<typeof gameContext> & {
   setGame: (game: TGame) => void;
   socket: TSocket | undefined;
+};
