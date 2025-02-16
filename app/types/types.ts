@@ -28,4 +28,3 @@ export type TGameOptions = z.infer<typeof gameOptions>;
 export type TGameContext = z.infer<typeof gameContext> & {
   setGame: (game: TGame) => void;
   socket: TSocket | undefined;
-};
