@@ -27,6 +27,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       autoConnect: false,
     });
     setSocket(newSocket);
+    
 
     newSocket.on("connect", () => {
       console.log("Connected to server");
