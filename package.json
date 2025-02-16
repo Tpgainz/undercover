@@ -5,7 +5,7 @@
     "email": "tpain45200@gmail.com"
   },
   "license": "MIT",
-  "description": "undercover peer game made with react",
+  "description": "undercover game made with react",
   "keywords": [
     "react",
     "next",
@@ -17,14 +17,10 @@
     "url": "https://github.com/tpgainz/undercover"
   },
   "version": "0.1.0",
-  "private": true,
   "scripts": {
-    "dev": "concurrently \"next dev\" \"npm run express\"",
-    "express": "nodemon --watch server/**/*.ts --ext ts,json --exec ts-node --project tsconfig.server.json server/index.ts",
-    "build": "next build && npm run build:server",
-    "build:server": "tsc -p tsconfig.server.json",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
-    "start:server": "node .next/server.js",
     "lint": "next lint"
   },
   "dependencies": {
@@ -51,8 +47,6 @@
     "clsx": "^2.1.0",
     "eslint": "8.56.0",
     "eslint-config-next": "14.0.4",
-    "express": "^4.18.2",
-    "http": "^0.0.1-security",
     "lucide-react": "^0.309.0",
     "next": "14.0.4",
     "next-themes": "^0.2.1",

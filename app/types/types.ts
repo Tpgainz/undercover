@@ -2,7 +2,7 @@ import { TSocket } from "@/lib/socket";
 import { schemas } from "@tpgainz/undercover-lib";
 import { z } from "zod";
 
-const { game,  gameContext, gameOptions, players } = schemas;
+const { game, gameContext, gameOptions, players } = schemas;
 
 export type TPlayers = z.infer<typeof players>;
 
