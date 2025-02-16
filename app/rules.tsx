@@ -10,7 +10,9 @@ export default function Rules() {
         <CardTitle className="text-3xl mx-auto">Rules</CardTitle>
       </CardHeader>
       <CardContent>
-        <RuleTitle>Game overview</RuleTitle>
+        <RuleTitle>Game overview
+          
+        </RuleTitle>
         <RuleText>
           <RuleList>
             <RuleListItem>
