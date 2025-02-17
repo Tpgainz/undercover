@@ -23,7 +23,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const gameRef = useRef(game);
 
   useEffect(() => {
-    const newSocket = io("https://undercover-wss.vercel.app", {
+    const newSocket = io(process.env.SOCKET_ORIGIN ?? "http://localhost:5555", {
       autoConnect: false,
     });
     setSocket(newSocket);
